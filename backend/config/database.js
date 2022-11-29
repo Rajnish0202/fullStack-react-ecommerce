@@ -8,9 +8,6 @@ const connectDatabase = () => {
     })
     .then(() => {
       console.log('Database connection successfully');
-    })
-    .catch((err) => {
-      console.log(err);
     });
 };
 
