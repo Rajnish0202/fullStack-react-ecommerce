@@ -169,3 +169,65 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     user,
   });
 });
+
+// Get All Users (Admin)
+exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.find();
+  const userCount = await User.countDocuments();
+
+  res.status(200).json({
+    success: true,
+    userCount,
+    user,
+  });
+});
+
+// Get single user details (admin)
+exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler(`User does not exist with Id: ${req.params.id}`));
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Update User Details (Admin)
+exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(201).json({
+    success: true,
+    message: `User's Role Update Successfully.`,
+  });
+});
+
+// Delete User (Admin)
+exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(new ErrorHandler(`User does not exist with Id: ${req.params.id}`));
+  }
+
+  await user.remove();
+
+  res.status(201).json({
+    success: true,
+    message: 'User Deleted Successfully.',
+  });
+});
