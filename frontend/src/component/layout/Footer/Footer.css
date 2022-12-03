@@ -18,6 +18,7 @@ footer {
   letter-spacing: 1px;
   font-family: 'Roboto';
   font-size: 1vmax;
+  text-align: center;
 }
 
 .leftFooter > p {
