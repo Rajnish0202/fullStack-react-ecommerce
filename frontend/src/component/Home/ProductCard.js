@@ -17,7 +17,7 @@ const Product = ({ product }) => {
       <p>{product.name}</p>
       <div>
         <ReactStars {...options} />{' '}
-        <span>
+        <span className='productCardSpan'>
           ({product.numOfReviews} {product.numOfReviews > 1 ? 'Reviews' : 'Review'})
         </span>
       </div>

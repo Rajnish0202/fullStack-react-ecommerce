@@ -68,22 +68,24 @@
   width: 80vw;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 100%;
+  min-height: 30vh;
 }
 
 .productCard {
-  width: 15vmax;
+  width: 14vmax;
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: rgb(48, 48, 48);
   margin: 2vmax;
   transition: all 0.5s;
-  padding: 0.5vmax;
+  padding-bottom: 0.5vmax;
 }
 
 .productCard > img {
-  width: 15vmax;
-  height: 20vmax;
+  width: 14vmax;
+  height: 16vmax;
   object-fit: contain;
 }
 
@@ -94,7 +96,7 @@
   align-items: center;
 }
 
-.productCard > div > span {
+.productCardSpan {
   margin: 0.5vmax;
   font: 300 0.7vmax 'Roboto';
 }

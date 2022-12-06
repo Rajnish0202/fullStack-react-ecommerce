@@ -20,6 +20,8 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
   const productsCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
+
+  const categories = await Product.find().distinct('category');
   const products = await apiFeature.query;
 
   res.status(200).json({
@@ -27,6 +29,16 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
     productsCount,
     products,
     resultPerPage,
+    categories,
+  });
+});
+
+exports.getProductCategories = catchAsyncErrors(async (req, res, next) => {
+  const categories = await Product.find().distinct('category');
+
+  res.status(200).json({
+    success: true,
+    categories,
   });
 });
 
