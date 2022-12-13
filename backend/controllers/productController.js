@@ -19,7 +19,10 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
   const resultPerPage = 8;
   const productsCount = await Product.countDocuments();
 
-  const apiFeature = new ApiFeatures(Product.find(), req.query).search().filter().pagination(resultPerPage);
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
 
   const categories = await Product.find().distinct('category');
   const products = await apiFeature.query;
@@ -104,11 +107,14 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   const product = await Product.findById(productId);
 
-  const isReviewed = product.reviews.find((rev) => rev.user.toString() === req.user._id.toString());
+  const isReviewed = product.reviews.find(
+    (rev) => rev.user.toString() === req.user._id.toString()
+  );
 
   if (isReviewed) {
     product.reviews.forEach((rev) => {
-      if (rev.user.toString() === req.user._id.toString()) (rev.rating = rating), (rev.comment = comment);
+      if (rev.user.toString() === req.user._id.toString())
+        (rev.rating = rating), (rev.comment = comment);
     });
   } else {
     product.reviews.push(review);
@@ -126,7 +132,9 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: isReviewed ? 'Review Updated Successfully.' : 'Review Created Successfully.',
+    message: isReviewed
+      ? 'Review Updated Successfully.'
+      : 'Review Created Successfully.',
   });
 });
 
@@ -152,7 +160,9 @@ exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('Product not Found!', 404));
   }
 
-  const reviews = product.reviews.filter((rev) => rev._id.toString() !== req.query.id.toString());
+  const reviews = product.reviews.filter(
+    (rev) => rev._id.toString() !== req.query.id.toString()
+  );
 
   let avg = 0;
   reviews.forEach((rev) => {

@@ -18,7 +18,8 @@ const Product = ({ product }) => {
       <div>
         <ReactStars {...options} />{' '}
         <span className='productCardSpan'>
-          ({product.numOfReviews} {product.numOfReviews > 1 ? 'Reviews' : 'Review'})
+          ({product.numOfReviews}{' '}
+          {product.numOfReviews > 1 ? 'Reviews' : 'Review'})
         </span>
       </div>
       <span>₹{product.price}</span>

@@ -41,7 +41,10 @@ const Home = () => {
           <h2 className='homeHeading'>Featured Products</h2>
 
           <div className='container' id='container'>
-            {products && products.map((product) => <Product product={product} key={product._id} />)}
+            {products &&
+              products.map((product) => (
+                <Product product={product} key={product._id} />
+              ))}
           </div>
         </>
       )}
