@@ -98,7 +98,12 @@ const OrderDetails = () => {
                   order.orderItems.map((item) => (
                     <div key={item.product}>
                       <img src={item.image} alt={item.name} />
-                      <Link to={`/product/${item.product}`}>{item.name}</Link>
+                      <Link
+                        to={`/product/${item.product}`}
+                        style={{ textTransform: 'capitalize' }}
+                      >
+                        {item.name}
+                      </Link>
                       <span>
                         {item.quantity} X ₹{item.price} = {''}
                         <b>₹{item.price * item.quantity}</b>

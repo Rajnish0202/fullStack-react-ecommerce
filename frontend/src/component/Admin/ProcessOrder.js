@@ -7,18 +7,33 @@ import Loader from '../layout/Loader/Loader';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import { Button } from '@material-ui/core';
 import { useEffect, useState } from 'react';
-import { clearErrors, getOrderDetails } from '../../actions/orderAction';
+import {
+  clearErrors,
+  getOrderDetails,
+  updateOrder,
+} from '../../actions/orderAction';
 import { useAlert } from 'react-alert';
+import { UPDATE_ORDERS_RESET } from '../../constants/orderConstants';
+import './processOrder.css';
 
 const ProcessOrder = () => {
   const [status, setStatus] = useState('');
   const { order, error, loading } = useSelector((state) => state.orderDetails);
+  const { error: updateError, isUpdated } = useSelector((state) => state.order);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
   const { id } = useParams();
 
-  const processOrderHandler = () => {};
+  const processOrderHandler = (e) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+
+    myForm.set('status', status);
+
+    dispatch(updateOrder(id, myForm));
+  };
 
   useEffect(() => {
     if (error) {
@@ -26,8 +41,18 @@ const ProcessOrder = () => {
       dispatch(clearErrors());
     }
 
+    if (updateError) {
+      alert.error(error);
+      dispatch(clearErrors);
+    }
+
+    if (isUpdated) {
+      alert.success('Order Process Updated Successfully.');
+      dispatch({ type: UPDATE_ORDERS_RESET });
+    }
+
     dispatch(getOrderDetails(id));
-  }, [alert, error, dispatch, id]);
+  }, [alert, error, dispatch, id, updateError, isUpdated]);
 
   return (
     <>
@@ -38,14 +63,21 @@ const ProcessOrder = () => {
           {loading ? (
             <Loader />
           ) : (
-            <div className='confirmOrderPage'>
+            <div
+              className='confirmOrderPage'
+              style={{
+                display: order.orderStatus === 'Delivered' ? 'block' : 'grid',
+              }}
+            >
               <div>
                 <div className='confirmShippingArea'>
                   <Typography>Shipping Info</Typography>
                   <div className='orderDetailsContainerBox'>
                     <div>
                       <p>Name:</p>
-                      <span>{order.user && order.user.name}</span>
+                      <span style={{ textTransform: 'capitalize' }}>
+                        {order.user && order.user.name}
+                      </span>
                     </div>
                     <div>
                       <p>Phone:</p>
@@ -105,7 +137,10 @@ const ProcessOrder = () => {
                       order.orderItems.map((item) => (
                         <div key={item.product}>
                           <img src={item.image} alt={item.name} />
-                          <Link to={`/product/${item.product}`}>
+                          <Link
+                            to={`/product/${item.product}`}
+                            style={{ textTransform: 'capitalize' }}
+                          >
                             {item.name}
                           </Link>
                           <span>
@@ -117,9 +152,13 @@ const ProcessOrder = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              <div
+                style={{
+                  display: order.orderStatus === 'Delivered' ? 'none' : 'block',
+                }}
+              >
                 <form
-                  className='createProductForm'
+                  className='updateOrderForm'
                   onSubmit={processOrderHandler}
                 >
                   <h1>Process Order</h1>

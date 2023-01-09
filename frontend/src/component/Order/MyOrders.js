@@ -89,7 +89,7 @@ const MyOrders = () => {
             {orders &&
               orders.map((item) => (
                 <div className='dataDetails' key={item._id}>
-                  <p title={item._id}>{item._id.substring(20, 24)}</p>
+                  <p title={item._id}>{item._id}</p>
                   <p
                     className={
                       item.orderStatus === 'Processing'
