@@ -9,8 +9,17 @@ const dotenv = require('dotenv');
 dotenv.config({ path: 'backend/config/config.env' });
 
 app.use(express.json());
+app.use(
+  bodyParser.json({ limit: '50mb', extended: true, parameterLimit: 500000 })
+);
+app.use(
+  bodyParser.urlencoded({
+    limit: '50mb',
+    extended: true,
+    parameterLimit: 500000,
+  })
+);
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 // Routes Imports

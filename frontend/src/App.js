@@ -1,3 +1,4 @@
+import axios from 'axios';
 import './App.css';
 import Header from './component/layout/Header/Header.js';
 import {
@@ -18,6 +19,8 @@ import store from './store/store';
 import { loadUser } from './actions/userAction';
 import UserOptions from './component/layout/Header/UserOptions.js';
 import { useSelector } from 'react-redux';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import Profile from './component/User/Profile.js';
 import UpdateProfile from './component/User/UpdateProfile.js';
 import UpdatePassword from './component/User/UpdatePassword.js';
@@ -29,9 +32,13 @@ import ConfirmOrder from './component/Cart/ConfirmOrder.js';
 import Payment from './component/Cart/Payment.js';
 import OrderSuccess from './component/Cart/OrderSuccess.js';
 import MyOrders from './component/Order/MyOrders.js';
-import axios from 'axios';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import OrderDetails from './component/Order/OrderDetails.js';
+import Dashboard from './component/Admin/Dashboard.js';
+import ProductList from './component/Admin/ProductList.js';
+import NewProduct from './component/Admin/NewProduct';
+import UpdateProduct from './component/Admin/UpdateProduct.js';
+import OrderList from './component/Admin/OrderList.js';
+import ProcessOrder from './component/Admin/ProcessOrder.js';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -58,62 +65,67 @@ function App() {
       <Header />
       {isAuthenticated && <UserOptions user={user} />}
       <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route exact path='/product/:id' element={<ProductDetails />} />
-        <Route exact path='/products/' element={<Products />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/product/:id' element={<ProductDetails />} />
+        <Route path='/products/' element={<Products />} />
         <Route path='/products/:keyword' element={<Products />} />
-        <Route exact path='/search' element={<Search />} />
+        <Route path='/search' element={<Search />} />
 
-        {isAuthenticated === true ? (
-          <Route exact path='/account' element={<Profile />} />
-        ) : (
-          <Route exact path='/account' element={<Navigate to='/login' />} />
-        )}
-
-        {isAuthenticated === true ? (
-          <Route exact path='/me/update' element={<UpdateProfile />} />
-        ) : (
-          <Route exact path='/me/update' element={<Navigate to='/login' />} />
-        )}
-
-        {isAuthenticated === true ? (
-          <Route exact path='/password/update' element={<UpdatePassword />} />
-        ) : (
-          <Route
-            exact
-            path='/password/update'
-            element={<Navigate to='/login' />}
-          />
-        )}
-
-        <Route exact path='/password/forgot' element={<ForgotPassword />} />
         <Route
-          exact
-          path='/password/reset/:token'
-          element={<ResetPassword />}
+          path='/account'
+          element={
+            isAuthenticated === true ? <Profile /> : <Navigate to='/login' />
+          }
         />
 
-        <Route exact path='/login' element={<LoginSignUp />} />
-        <Route exact path='/cart' element={<Cart />} />
-        {isAuthenticated === true ? (
-          <Route exact path='/shipping' element={<Shipping />} />
-        ) : (
-          <Route exact path='/shipping' element={<Navigate to='/login' />} />
-        )}
+        <Route
+          path='/me/update'
+          element={
+            isAuthenticated === true ? (
+              <UpdateProfile />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
 
-        {isAuthenticated === true ? (
-          <Route exact path='/order/confirm' element={<ConfirmOrder />} />
-        ) : (
-          <Route
-            exact
-            path='/order/confirm'
-            element={<Navigate to='/login' />}
-          />
-        )}
+        <Route
+          path='/password/update'
+          element={
+            isAuthenticated === true ? (
+              <UpdatePassword />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+
+        <Route path='/password/forgot' element={<ForgotPassword />} />
+        <Route path='/password/reset/:token' element={<ResetPassword />} />
+
+        <Route path='/login' element={<LoginSignUp />} />
+        <Route path='/cart' element={<Cart />} />
+
+        <Route
+          path='/shipping'
+          element={
+            isAuthenticated === true ? <Shipping /> : <Navigate to='/login' />
+          }
+        />
+
+        <Route
+          path='/order/confirm'
+          element={
+            isAuthenticated === true ? (
+              <ConfirmOrder />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
 
         {stripeApiKey && (
           <Route
-            exact
             path='/process/payment'
             element={
               <Elements stripe={loadStripe(stripeApiKey)}>
@@ -123,17 +135,95 @@ function App() {
           />
         )}
 
-        {isAuthenticated === true ? (
-          <Route exact path='/success' element={<OrderSuccess />} />
-        ) : (
-          <Route exact path='/success' element={<Navigate to='/login' />} />
-        )}
+        <Route
+          path='/success'
+          element={
+            isAuthenticated === true ? (
+              <OrderSuccess />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
 
-        {isAuthenticated === true ? (
-          <Route exact path='/orders' element={<MyOrders />} />
-        ) : (
-          <Route exact path='/orders' element={<Navigate to='/login' />} />
-        )}
+        <Route
+          path='/orders'
+          element={
+            isAuthenticated === true ? <MyOrders /> : <Navigate to='/login' />
+          }
+        />
+
+        <Route
+          path='/order/:id'
+          element={
+            isAuthenticated === true ? (
+              <OrderDetails />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+
+        <Route
+          path='/admin/dashboard'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <Dashboard />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+        <Route
+          path='/admin/products'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <ProductList />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+        <Route
+          path='/admin/product'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <NewProduct />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+        <Route
+          path='/admin/product/:id'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <UpdateProduct />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+        <Route
+          path='/admin/orders'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <OrderList />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+        <Route
+          path='/admin/order/:id'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <ProcessOrder />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
       </Routes>
 
       <Footer />

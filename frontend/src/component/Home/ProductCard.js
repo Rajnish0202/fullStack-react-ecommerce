@@ -1,14 +1,14 @@
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from '@material-ui/lab';
+
 import { Link } from 'react-router-dom';
 
 const Product = ({ product }) => {
   const options = {
-    edit: false,
-    color: 'rgba(20,20,20,0.1)',
     activeColor: '#eb4034',
-    size: window.innerWidth < 600 ? 20 : 25,
     value: product.ratings,
-    isHalf: true,
+    precision: 0.5,
+    readOnly: true,
+    size: 'small',
   };
 
   return (
@@ -16,7 +16,7 @@ const Product = ({ product }) => {
       <img src={product.images[0].url} alt={product.name} />
       <p>{product.name}</p>
       <div>
-        <ReactStars {...options} />{' '}
+        <Rating {...options} />{' '}
         <span className='productCardSpan'>
           ({product.numOfReviews}{' '}
           {product.numOfReviews > 1 ? 'Reviews' : 'Review'})

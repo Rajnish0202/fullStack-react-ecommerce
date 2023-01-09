@@ -44,9 +44,9 @@
   padding: 1vmax 0;
 }
 
-.detailsBlock-2 > span {
-  color: rgba(54, 54, 54, 0.582);
+.detailsBlock-2-span {
   font: 200 1vmax cursive;
+  color: rgba(0, 0, 0, 0.622);
 }
 
 .detailsBlock-3 {
@@ -80,7 +80,7 @@
 .detailsBlock-3-1-1 > input {
   border: none;
   padding: 0.5vmax;
-  width: 1vmax;
+  width: 1.5vmax;
   text-align: center;
   outline: none;
   font: 400 1vmax 'Roboto';
@@ -136,6 +136,19 @@
   transform: scale(1.1);
 }
 
+.submitDialog {
+  display: flex;
+  flex-direction: column;
+}
+
+.submitDialogTextArea {
+  border: 1px solid rgba(0, 0, 0, 0.082);
+  margin: 1vmax 0;
+  outline: none;
+  padding: 1rem;
+  font: 300 1rem 'Roboto';
+}
+
 .reviewsHeading {
   color: #000000be;
   font: 500 1.4vmax 'Roboto';
@@ -166,6 +179,9 @@
 
 .reviewCard > img {
   width: 5vmax;
+  height: 5vmax;
+  object-fit: cover;
+  border-radius: 100%;
 }
 
 .reviewCard > p {
@@ -174,7 +190,7 @@
   text-transform: capitalize;
 }
 
-.reviewCard > span {
+.reviewCard-span {
   color: rgba(0, 0, 0, 0.445);
   font: 300 0.9vmax cursive;
 }
@@ -263,5 +279,13 @@
     padding: 1.5vmax;
     width: 20vmax;
     margin: 3vmax 0;
+  }
+
+  .reviewCard > p {
+    font: 300 3vw 'Roboto';
+  }
+
+  .reviewCard-span {
+    font: 300 5vw cursive;
   }
 }
