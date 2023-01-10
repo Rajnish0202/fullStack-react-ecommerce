@@ -41,6 +41,8 @@ import OrderList from './component/Admin/OrderList.js';
 import ProcessOrder from './component/Admin/ProcessOrder.js';
 import UsersList from './component/Admin/UsersList.js';
 import UpdateUser from './component/Admin/UpdateUser.js';
+import ProductReviews from './component/Admin/ProductReviews.js';
+import NotFound from './component/layout/Not Found/NotFound';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -61,6 +63,8 @@ function App() {
 
     getStripeApiKey();
   }, []);
+
+  window.addEventListener('contextmenu', (e) => e.preventDefault());
 
   return (
     <Router>
@@ -246,6 +250,18 @@ function App() {
             )
           }
         />
+        <Route
+          path='/admin/reviews'
+          element={
+            isAuthenticated === true && user.role === 'admin' ? (
+              <ProductReviews />
+            ) : (
+              <Navigate to='/login' />
+            )
+          }
+        />
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
 
       <Footer />
